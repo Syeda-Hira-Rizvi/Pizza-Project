@@ -62,31 +62,54 @@ router.post("/register", async(req, res) => {
 //         }
 //       });
 
+// router.post("/login", async (req, res) => {
+//   const { email, password } = req.body;
+
+//   // checking if user has given password and email both
+
+//   if (!email || !password) {
+//     return res.send("Please Enter Email & Password", 400);
+//   }
+
+//   const user = await User.findOne({ email }).select("+password");
+
+//   if (!user) {
+//     return res.send("Invalid email or password", 401);
+//   }
+
+//   const isPasswordMatched = await user.comparePassword(password);
+
+//   if (!isPasswordMatched) {
+//     return res.send("Invalid email or password", 401);
+//   }
+
+//   sendToken(user, 200, res);
+// });
+
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
-  // checking if user has given password and email both
-
-  if (!email || !password) {
-    return res.send("Please Enter Email & Password", 400);
+  try {
+    const user = await User.find({ email, password });
+    if (user.length > 0) {
+      const currentUser = {
+        name: user[0].name,
+        email: user[0].email,
+        isAdmin: user[0].isAdmin,
+        _id: user[0].Id,
+      };
+      res.status(200).send(currentUser);
+    } else {
+      res.status(400).json({
+        message: "Login Failed",
+      });
+    }
+  } catch (error) {
+    res.status(404).json({
+      message: "Something Went wrong",
+    });
   }
-
-  const user = await User.findOne({ email }).select("+password");
-
-  if (!user) {
-    return res.send("Invalid email or password", 401);
-  }
-
-  const isPasswordMatched = await user.comparePassword(password);
-
-  if (!isPasswordMatched) {
-    return res.send("Invalid email or password", 401);
-  }
-
-  sendToken(user, 200, res);
 });
-
-      
+     
 
 
 // Forgot Password

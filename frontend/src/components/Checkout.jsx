@@ -24,8 +24,9 @@ const Checkout = ({ subTotal }) => {
           amount={subTotal * 100}
           shippingAddress
           token={tokenHandler}
-          stripeKey="pk_test_51HT3awLRpPHpN9zVZksDRZ16m6HANATIi914WwDG7xbmNKQGsMyXEBTuUxlNZlkZ3EYFsfu5t0NQDeNQYbukyICZ000lVzvD9Y"
-          currency="INR"
+          stripeKey="pk_test_51P2AwG02j2K2zxTSXBVmInUCse0JOH017Yjmoc2lqsw4921a7sA6m3XMu72tAQzEr5atztJOU1TNAfrmUNWmDVUy00jTjtfryB"
+          currency="USD"
+          
         >
           <Button>Pay Now</Button>
         </StripeCheckout>

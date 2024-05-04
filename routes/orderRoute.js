@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 const stripe = require("stripe")(
-  "sk_test_51HT3awLRpPHpN9zViTDEbkof6MkC4qStmbuzVSwEUm05GbEZnd2a4WkgoI0lyBdF3JsF8zmgPQHue92gLGsMQmBe00cxfp61Uq"
+  "sk_test_51P2AwG02j2K2zxTSNgW045asUD1ZhznLBUc6M6qvFwXmmydikOisMu8i2wUNHOOEq97LnehKIcfhjLpJ1yUSWsLP003Gk1kMX1"
 );
 const Order = require("../models/orderModel");
 
@@ -16,7 +16,7 @@ router.post("/placeorder", async (req, res) => {
     const payment = await stripe.charges.create(
       {
         amount: subTotal * 100,
-        currency: "inr",
+        currency: "USD",
         customer: customer.id,
         receipt_email: token.email,
       },
@@ -42,7 +42,7 @@ router.post("/placeorder", async (req, res) => {
       newOrder.save();
       res.send("Payment Success");
     } else {
-      res.send("Payment Faild");
+      res.send("Payment Failed");
     }
   } catch (error) {
     res.status(400).json({
@@ -59,7 +59,7 @@ router.post("/getuserorder", async (req, res) => {
     res.status(200).send(orders);
   } catch (error) {
     res.status(400).json({
-      message: "Something Went Wront",
+      message: "Something Went Wrong",
       error: error.stack,
     });
   }
@@ -71,7 +71,7 @@ router.get("/alluserorder", async (req, res) => {
     res.status(200).send(orders);
   } catch (error) {
     res.status(400).json({
-      message: "Something Went Wront",
+      message: "Something Went Wrong",
       error: error.stack,
     });
   }
@@ -83,10 +83,10 @@ router.post("/deliverorder", async (req, res) => {
     const order = await Order.findOne({ _id: orderid });
     order.isDeliverd = true;
     await order.save();
-    res.status(200).send("Order deliverd success");
+    res.status(200).send("Order delivered success");
   } catch (error) {
     res.status(400).json({
-      message: "Something Went Wront",
+      message: "Something Went Wrong",
       error: error.stack,
     });
   }
